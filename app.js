@@ -3480,7 +3480,7 @@ OraSchool.controller('eventsController', function(dataFactory,$routeParams,$root
     }
 });
 
-OraSchool.controller('materialsController', function(dataFactory,$rootScope,$scope) {
+OraSchool.controller('materialsController', function(dataFactory,$rootScope,$scope,$http,$sce) {
     $scope.classes = {};
     $scope.subject = {};
     $scope.materials = {};
@@ -3503,12 +3503,31 @@ OraSchool.controller('materialsController', function(dataFactory,$rootScope,$sco
         }
     }
 
+
+
     $scope.sectionsList = function(){
-        dataFactory.httpRequest('dashboard/sectionsSubjectsList','POST',{},{"classes":$scope.form.class_id}).then(function(data) {
+        dataFactory.httpRequest('dashboard/sectionsSubjectsList','POST',{},{"classes":$scope.form.classId}).then(function(data) {
             $scope.subject = data.subjects;
             $scope.sections = data.sections;
             $scope.form.subject = data.subjects;
             $scope.form.sections = data.sections;
+        });
+    }
+
+    $scope.certGetStdList = function()
+    {
+        showHideLoad();
+        dataFactory.httpRequest('reports/certGetStdList','POST',{},{"classId":$scope.form.classId,"sectionId":$scope.form.sectionId}).then(function(data) 
+        {
+            if(data)
+            {
+                $scope.certUsersList = data;
+            }
+            if($scope.certUsersList.length == 0)
+            {
+                alert($rootScope.phrase.noMatches);
+            }
+            showHideLoad(true);
         });
     }
 

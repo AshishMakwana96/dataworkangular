@@ -145,3 +145,36 @@ C:\xampp\htdocs\vapi\assets\templates	home.html
                 <button onclick="location.href='portal#/account';" class="btn btn-block btn-primary waves-effect waves-light" type="button"><span class="pull-left"><i class="ti-settings"></i> {{phrase.AccountSettings}}</span></button>
 
 
+
+
+
+
+
+
+
+C:\xampp\htdocs\vapi\assets\js\Angular
+
+app.js file code add 
+
+
+$scope.certGetStdList = function()
+    {
+        showHideLoad();
+        dataFactory.httpRequest('reports/certGetStdList','POST',{},{"classId":$scope.form.classId,"sectionId":$scope.form.sectionId}).then(function(data) 
+        {
+            if(data)
+            {
+                $scope.certUsersList = data;
+            }
+            if($scope.certUsersList.length == 0)
+            {
+                alert($rootScope.phrase.noMatches);
+            }
+            showHideLoad(true);
+        });
+    }
+
+C:\xampp\htdocs\vapi\assets\templates
+
+materials.html   change code
+
