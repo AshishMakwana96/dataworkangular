@@ -1,0 +1,147 @@
+C:\xampp\htdocs\vapi\assets\js\Angular
+
+app.js file code add 
+
+
+OraSchool.controller('dashboardController', function(dataFactory,$rootScope,$scope,$sce,$route,$location) 
+{
+    $scope.showModal = false;
+    $scope.userProfileData = function(id)
+    {
+        dataFactory.httpRequest('dashboard/userData/'+id).then(function(data) {
+            $scope.modalTitle = data.title;
+            $scope.modalContent = $sce.trustAsHtml(data.content);
+            $scope.showModal = !$scope.showModal;
+        });
+    };
+});
+
+
+
+
+
+C:\xampp\htdocs\vapi\app\Http\Controllers
+
+
+add laravel function
+
+
+public function userData($id)
+	{
+		$chkrole = $this->data['users']->role;
+		$data = \User::where('role',$chkrole)->where('id',$id);
+
+		if($data->count() > 0){
+			$data = $data->first()->toArray();
+			$data['birthday'] = $this->panelInit->unix_to_date($data['birthday']);
+
+			if($data['studentClass'] != "" AND $data['studentClass'] != "0"){
+				$class = \classes::where('id',$data['studentClass'])->first();
+			}
+
+			if($data['studentSection'] != "" AND $data['studentSection'] != "0"){
+				$section = \sections::where('id',$data['studentSection'])->first();
+			}
+
+			$parents = \User::where('parentOf','like','%"'.$id.'"%')->orWhere('parentOf','like','%:'.$id.'}%')->get();
+
+			$return = array();
+			$return['title'] = $data['fullName']." ".$this->panelInit->language['Profile'];
+
+			$return['content'] = "<div class='text-center'>";
+
+			$return['content'] .= "<img alt='".$data['fullName']."' class='user-image img-circle' style='width:70px; height:70px;' src='dashboard/profileImage/".$data['id']."'>";
+
+			$return['content'] .= "</div>";
+
+			$return['content'] .= "<h4>".$this->panelInit->language['dashboard']."</h4>";
+
+			$return['content'] .= "<table class='table table-bordered'><tbody>
+	                          <tr>
+	                              <td>".$this->panelInit->language['FullName']."</td>
+	                              <td>".$data['fullName']."</td>
+	                          </tr>
+	                          <tr>
+	                              <td>".$this->panelInit->language['rollid']."</td>
+	                              <td>".$data['studentRollId']."</td>
+	                          </tr>";
+	                          if(isset($class)){
+		                          $return['content'] .= "<tr>
+		                              <td>".$this->panelInit->language['class']."</td>
+		                              <td>".$class->className."</td>
+		                          </tr>";
+		                        }
+								if(isset($section)){
+	  	                          $return['content'] .= "<tr>
+	  	                              <td>Section</td>
+	  	                              <td>".$section->sectionName." - ".$section->sectionTitle."</td>
+	  	                          </tr>";
+	  	                        }
+	                          $return['content'] .= "<tr>
+	                              <td>".$this->panelInit->language['username']."</td>
+	                              <td>".$data['username']."</td>
+	                          </tr>
+	                          <tr>
+	                              <td>".$this->panelInit->language['email']."</td>
+	                              <td>".$data['email']."</td>
+	                          </tr>
+	                          <tr>
+	                              <td>".$this->panelInit->language['Birthday']."</td>
+	                              <td>".$data['birthday']."</td>
+	                          </tr>
+	                          <tr>
+	                              <td>".$this->panelInit->language['Gender']."</td>
+	                              <td>".$data['gender']."</td>
+	                          </tr>
+	                          <tr>
+	                              <td>".$this->panelInit->language['Address']."</td>
+	                              <td>".$data['address']."</td>
+	                          </tr>
+	                          <tr>
+	                              <td>".$this->panelInit->language['phoneNo']."</td>
+	                              <td>".$data['phoneNo']."</td>
+	                          </tr>
+	                          <tr>
+	                              <td>".$this->panelInit->language['mobileNo']."</td>
+	                              <td>".$data['mobileNo']."</td>
+	                          </tr>
+							  <tr>
+	                              <td>".$this->panelInit->language['parent']."</td>
+	                              <td>";
+								  foreach ($parents as $value) {
+									  $return['content'] .= $value->fullName . "<br/>";
+								  }
+			$return['content'] .= "</td>
+	                          </tr>
+
+	                          </tbody></table>";
+		}else{
+			$return['title'] = "Student deleted ";
+            $return['content'] = "<div class='text-center'> Student with this id has been deleted </div>";
+		}
+
+		return $return;
+	}
+
+
+
+
+
+
+
+laravel routes.php add code
+
+	Route::get('/dashboard/userData/{id}','DashboardController@userData');
+
+
+
+C:\xampp\htdocs\vapi\assets\templates	home.html
+
+ add code 
+
+
+
+ <button ng-click="userProfileData(dashboardData.baseUser.id)" class="btn btn-block btn-primary waves-effect waves-light" type="button"><span class="pull-left"><i class="ti-user"></i> View Profile</span></button>
+                <button onclick="location.href='portal#/account';" class="btn btn-block btn-primary waves-effect waves-light" type="button"><span class="pull-left"><i class="ti-settings"></i> {{phrase.AccountSettings}}</span></button>
+
+
