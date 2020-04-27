@@ -147,34 +147,14 @@ C:\xampp\htdocs\vapi\assets\templates	home.html
 
 
 
+C:\xampp\htdocs\vapi\assets\templates  materials.html
+
+(1) user type dropdowm student /teacher 
+if teacher select  don't nhi show 
+if student select  class studen show
 
 
+(2) Circular / Result Description  add editor
 
-
-
-C:\xampp\htdocs\vapi\assets\js\Angular
-
-app.js file code add 
-
-
-$scope.certGetStdList = function()
-    {
-        showHideLoad();
-        dataFactory.httpRequest('reports/certGetStdList','POST',{},{"classId":$scope.form.classId,"sectionId":$scope.form.sectionId}).then(function(data) 
-        {
-            if(data)
-            {
-                $scope.certUsersList = data;
-            }
-            if($scope.certUsersList.length == 0)
-            {
-                alert($rootScope.phrase.noMatches);
-            }
-            showHideLoad(true);
-        });
-    }
-
-C:\xampp\htdocs\vapi\assets\templates
-
-materials.html   change code
+(3)  in table check all uncheck all 
 

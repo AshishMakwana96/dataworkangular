@@ -65,7 +65,7 @@
                         <div class="form-group row">
                             <label class="col-sm-2 text-right control-label col-form-label">{{phrase.materialDesc}}</label>
                             <div class="col-sm-10">
-                                <textarea name="material_description" class="form-control" ng-model="form.material_description" placeholder="{{phrase.materialDesc}}"></textarea>
+                                <textarea ck-editor  name="material_description" class="form-control" ng-model="form.material_description" placeholder="{{phrase.materialDesc}}"></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -74,7 +74,33 @@
                                 <input type="file" name="material_file" id="material_add_file">
                             </div>
                         </div>
-                        <div class="form-group row" ng-class="{'has-error': addDorm['class_id[]'].$invalid}">
+                        <div class="form-group row" >
+                            <label class="col-sm-2 text-right control-label col-form-label">User Type</label>
+                            <div class="col-sm-10">
+                                <select class="form-control usertypeselect"  name="usertype"  required>
+                                    <option  value="">Select...</option>
+                                    <option  value="teacher">Teacher</option>
+                                    <option  value="student">student</option>
+                                </select>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            $(".usertypeselect").change(function () 
+                            {
+                                if ($(this).val()=='student')
+                                {
+                                    $('.classs_std_howhide').show();
+                                }
+                                else
+                                {
+                                    $('.classs_std_howhide').hide();
+                                }
+                            });
+                            $("#checkAll").change(function () {
+                                $("input:checkbox").prop('checked', $(this).prop("checked"));
+                            });
+                        </script>
+                        <div class="form-group row  classs_std_howhide" style="display: none;" ng-class="{'has-error': addDorm['class_id[]'].$invalid}">
                             <label class="col-sm-2 text-right control-label col-form-label">{{phrase.class}} *</label>
                             <div class="col-sm-10">
                                 <select class="form-control" ng-model="form.classId" name="classId[]" ng-change="sectionsList()" multiple required>
@@ -82,7 +108,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group row" ng-class="{'has-error': addDorm['sectionId[]'].$invalid}" ng-show="$root.dashboardData.enableSections == '1'">
+                        <div class="form-group row classs_std_howhide"  style="display: none;" ng-class="{'has-error': addDorm['sectionId[]'].$invalid}" ng-show="$root.dashboardData.enableSections == '1'">
                             <label class="col-sm-2 text-right control-label col-form-label">Section *</label>
                             <div class="col-sm-10">
                                 <select class="form-control" ng-model="form.sectionId" ng-change="certGetStdList()" name="sectionId[]" multiple ng-required="$root.dashboardData.enableSections == '1'">
@@ -98,7 +124,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row classs_std_howhide" style="display: none;">
                             <div class="col-sm-1">
                             </div>
                             <div class="col-sm-11">
@@ -106,7 +132,7 @@
                                 <table class="table table-hover table-bordered" style="margin-top: 30px;">
                                     <tbody>
                                         <tr>
-                                            <th>{{phrase.select}}</th>
+                                            <th><input type="checkbox" id="checkAll">{{phrase.select}}</th>
                                             <th>{{phrase.user}}</th>
                                             <th>{{phrase.username}}</th>
                                             <th>{{phrase.email}}</th>
