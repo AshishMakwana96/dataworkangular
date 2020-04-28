@@ -54,7 +54,6 @@
                 <button ng-click="changeView('list')" class="btn btn-danger btn-flat pull-right card-block-input-item">{{phrase.cancelAdd}}</button>
                 <h4 class="card-title">{{phrase.addMaterial}}</h4>
                 <div class="table-responsive">
-
                     <form class="form-horizontal" name="addDorm" role="form" ng-upload="saveAdd(content)" method="post" action="materials" novalidate>
                         <div class="form-group row" ng-class="{'has-error': addDorm.material_title.$invalid}">
                             <label class="col-sm-2 text-right control-label col-form-label">{{phrase.materialTitle}} *</label>
@@ -65,7 +64,7 @@
                         <div class="form-group row">
                             <label class="col-sm-2 text-right control-label col-form-label">{{phrase.materialDesc}}</label>
                             <div class="col-sm-10">
-                                <textarea ck-editor  name="material_description" class="form-control" ng-model="form.material_description" placeholder="{{phrase.materialDesc}}"></textarea>
+                                <textarea name="material_description" ck_editor class="form-control" ng-model="form.material_description" placeholder="{{phrase.materialDesc}}"></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -74,41 +73,15 @@
                                 <input type="file" name="material_file" id="material_add_file">
                             </div>
                         </div>
-                        <div class="form-group row" >
-                            <label class="col-sm-2 text-right control-label col-form-label">User Type</label>
-                            <div class="col-sm-10">
-                                <select class="form-control usertypeselect"  name="usertype"  required>
-                                    <option  value="">Select...</option>
-                                    <option  value="teacher">Teacher</option>
-                                    <option  value="student">student</option>
-                                </select>
-                            </div>
-                        </div>
-                        <script type="text/javascript">
-                            $(".usertypeselect").change(function () 
-                            {
-                                if ($(this).val()=='student')
-                                {
-                                    $('.classs_std_howhide').show();
-                                }
-                                else
-                                {
-                                    $('.classs_std_howhide').hide();
-                                }
-                            });
-                            $("#checkAll").change(function () {
-                                $("input:checkbox").prop('checked', $(this).prop("checked"));
-                            });
-                        </script>
-                        <div class="form-group row  classs_std_howhide" style="display: none;" ng-class="{'has-error': addDorm['class_id[]'].$invalid}">
+                        <div class="form-group row "  ng-class="{'has-error': addDorm['class_id[]'].$invalid}">
                             <label class="col-sm-2 text-right control-label col-form-label">{{phrase.class}} *</label>
                             <div class="col-sm-10">
-                                <select class="form-control" ng-model="form.classId" name="classId[]" ng-change="sectionsList()" multiple required>
+                                <select class="form-control" ng-model="form.class_id" name="class_id[]" ng-change="sectionsList()" multiple required>
                                     <option ng-repeat="class in classes" value="{{class.id}}">{{class.className}}</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group row classs_std_howhide"  style="display: none;" ng-class="{'has-error': addDorm['sectionId[]'].$invalid}" ng-show="$root.dashboardData.enableSections == '1'">
+                        <div class="form-group row "  ng-class="{'has-error': addDorm['sectionId[]'].$invalid}" ng-show="$root.dashboardData.enableSections == '1'">
                             <label class="col-sm-2 text-right control-label col-form-label">Section *</label>
                             <div class="col-sm-10">
                                 <select class="form-control" ng-model="form.sectionId" ng-change="certGetStdList()" name="sectionId[]" multiple ng-required="$root.dashboardData.enableSections == '1'">
@@ -116,7 +89,8 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group row"   ng-class="{'has-error': addDorm.subject_id.$invalid}">
+                         
+                        <div class="form-group row" ng-class="{'has-error': addDorm.subject_id.$invalid}">
                             <label class="col-sm-2 text-right control-label col-form-label">{{phrase.Subject}}</label>
                             <div class="col-sm-10">
                                 <select class="form-control" ng-model="form.subject_id" name="subject_id">
@@ -124,42 +98,40 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group row classs_std_howhide" style="display: none;">
+                        <div class="form-group row">
                             <div class="col-sm-1">
                             </div>
-                            <div class="col-sm-11">
-                            <form class="form-horizontal" novalidate ng-show="certUsersList">
-                                <table class="table table-hover table-bordered" style="margin-top: 30px;">
-                                    <tbody>
-                                        <tr>
-                                            <th><input type="checkbox" id="checkAll">{{phrase.select}}</th>
-                                            <th>{{phrase.user}}</th>
-                                            <th>{{phrase.username}}</th>
-                                            <th>{{phrase.email}}</th>
-                                        </tr>
-                                        <tr ng-repeat="user in certUsersList">
-                                            <td>
-                                                <input type="checkbox" checklist-model="form.selected_users" checklist-value="user.id">
-                                            </td>
-                                            <td>
-                                                <img alt="{{user.fullName}}" class="user-image img-circle" style="width:35px; height:35px;" ng-src="{{'dashboard/profileImage/'+user.id}}">
-                                                <a href="" ng-click="studentProfile( user.id )">{{user.fullName}}</a>
-                                            </td>
-                                            <td>
-                                                {{user.username}}
-                                            </td>
-                                            <td>{{user.email}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <!-- <div class="form-group m-b-0">
-                                    <div class="col-sm-12">
-                                        <button type="submit" ng-click="printCertificate()" class="btn btn-info waves-effect waves-light">{{phrase.gen_cert}}</button>
-                                    </div>
-                                </div> -->
-                            </form>
+                            <div class="col-sm-11" ng-show="certUsersList">
+                                    <table class="table table-hover table-bordered" style="margin-top: 30px;">
+                                        <tbody>
+                                            <tr>
+                                                <th><input type="checkbox"  id="checkAll"  >{{phrase.select}}</th>
+                                                <th>{{phrase.user}}</th>
+                                                <th>{{phrase.username}}</th>
+                                                <th>{{phrase.email}}</th>
+                                            </tr>
+                                            <tr ng-repeat="user in certUsersList">
+                                                <td>
+                                                    <input type="checkbox" name="user_id[]" checklist-model="form.selected_users" checklist-value="user.id" value="{{user.id}}" >
+                                                </td>
+                                                <td>
+                                                    <img alt="{{user.fullName}}" class="user-image img-circle" style="width:35px; height:35px;" ng-src="{{'dashboard/profileImage/'+user.id}}">
+                                                    <a href="" ng-click="studentProfile( user.id )">{{user.fullName}}</a>
+                                                </td>
+                                                <td>
+                                                    {{user.username}}
+                                                </td>
+                                                <td>{{user.email}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <!-- <div class="form-group m-b-0">
+                                        <div class="col-sm-12">
+                                            <button type="submit" ng-click="printCertificate()" class="btn btn-info waves-effect waves-light">{{phrase.gen_cert}}</button>
+                                        </div>
+                                    </div> -->
+                            </div>
                         </div>
-                        </div>    
                         <div class="form-group m-b-0">
                             <div class="offset-sm-2 col-sm-10">
                                 <button type="submit" class="btn btn-info waves-effect waves-light" ng-disabled="addDorm.$invalid">{{phrase.addMaterial}}</button>
@@ -236,3 +208,8 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $("#checkAll").change(function () {
+        $("input:checkbox").prop('checked', $(this).prop("checked"));
+    });
+</script>
