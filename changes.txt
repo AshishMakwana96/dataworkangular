@@ -13,7 +13,7 @@ OraSchool.controller('dashboardController', function(dataFactory,$rootScope,$sco
             $scope.modalContent = $sce.trustAsHtml(data.content);
             $scope.showModal = !$scope.showModal;
         });
-    };
+    }
 });
 
 
