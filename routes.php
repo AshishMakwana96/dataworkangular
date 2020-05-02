@@ -282,6 +282,7 @@ Route::group( array('middleware'=>'web') ,function(){
 	Route::get('/classschedule','DashboardController@index');
 	Route::get('/classschedule/listAll','ClassScheduleController@listAll');
 	Route::get('/classschedule/{id}','ClassScheduleController@fetch');
+	Route::get('/classschedule/saveAdd/','ClassScheduleController@saveAdd');
 	Route::get('/classschedule/sub/{id}','ClassScheduleController@fetchSub');
 	Route::post('/classschedule/sub/{id}','ClassScheduleController@editSub');
     Route::post('/classschedule/delete/{class}/{id}','ClassScheduleController@delete');

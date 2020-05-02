@@ -2330,6 +2330,7 @@ OraSchool.controller('accountSettingsController', function(dataFactory,$rootScop
 
 OraSchool.controller('classScheduleController', function(dataFactory,$rootScope,$scope,$sce) {
     $scope.classes = {};
+    $scope.makeclassess = [];
     $scope.subject = {};
     $scope.days = {};
     $scope.classSchedule = {};
@@ -2338,8 +2339,13 @@ OraSchool.controller('classScheduleController', function(dataFactory,$rootScope,
     $scope.form = {};
     $scope.userRole ;
 
-    dataFactory.httpRequest('classschedule/listAll').then(function(data) {
+    dataFactory.httpRequest('classschedule/listAll').then(function(data) 
+    {
         $scope.classes = data.classes;
+        for (let [key, value] of Object.entries(data.classes)) 
+        {
+            $scope.makeclassess.push({'id':key,'className':value });
+        }
         $scope.subject = data.subject;
         $scope.teachers = data.teachers;
         $scope.sections = data.sections;
@@ -2347,8 +2353,19 @@ OraSchool.controller('classScheduleController', function(dataFactory,$rootScope,
         $scope.section_id = data.section_id;
         $scope.userRole = data.userRole;
         $scope.days = data.days;
-        showHideLoad(false);
+        showHideLoad(true);
     });
+
+    $scope.sectionsList = function(){
+        dataFactory.httpRequest('dashboard/sectionsSubjectsList','POST',{},{"classes":$scope.form.class_id}).then(function(data) {
+            $scope.makesections = data.sections;
+        });
+    }
+
+
+    $scope.isSectionSelected = function(arrayData,valueData){
+        return arrayData.indexOf(valueData) > -1;
+    }
 
     $scope.edit = function(class_id,section_id){
         if(typeof section_id == "undefined"){
@@ -2398,6 +2415,13 @@ OraSchool.controller('classScheduleController', function(dataFactory,$rootScope,
         $scope.scheduleModal = !$scope.scheduleModal;
     }
 
+    $scope.addClassSchedule = function()
+    {
+        $scope.form = {};
+        $scope.modalTitle = $rootScope.phrase.addSch;
+        $scope.addClassScheduleModal = !$scope.addClassScheduleModal;
+    }
+
     $scope.saveAddSub = function(){
         showHideLoad();
         dataFactory.httpRequest('classschedule/'+$scope.classId,'POST',{},$scope.form).then(function(data) {
@@ -2410,6 +2434,14 @@ OraSchool.controller('classScheduleController', function(dataFactory,$rootScope,
             }
             $scope.scheduleModal = !$scope.scheduleModal;
             showHideLoad(true);
+        });
+    }
+
+    $scope.saveWithClassAddSub = function(){
+        showHideLoad();
+        dataFactory.httpRequest('classschedule/saveAdd','POST',{},$scope.form).then(function(data)
+        {
+            console.log(data);   
         });
     }
 
