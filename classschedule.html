@@ -108,11 +108,11 @@
 </div>
 
 <modal visible="addClassScheduleModal">
-    <form class="form-horizontal" name="addSubForm" role="form" ng-submit="saveWithClassAddSub()" novalidate>
+    <form class="form-horizontal" name="addSubForm" role="form" ng-submit="saveAddSub()" novalidate>
         <div class="form-group row"  ng-class="{'has-error': addSubForm.class_id.$invalid}">
             <label class="col-sm-4 control-label">{{phrase.class}} *</label>
             <div class="col-sm-8">
-                <select class="form-control" ng-model="form.class_id" required name="class_id" ng-change="sectionsList()" >
+                <select class="form-control" ng-model="form.classid" required name="classid" ng-change="sectionsList()" >
                     <option ng-repeat="class in makeclassess" value="{{class.id}}">{{class.className}}</option>
                 </select>
             </div>

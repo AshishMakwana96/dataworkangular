@@ -2357,7 +2357,7 @@ OraSchool.controller('classScheduleController', function(dataFactory,$rootScope,
     });
 
     $scope.sectionsList = function(){
-        dataFactory.httpRequest('dashboard/sectionsSubjectsList','POST',{},{"classes":$scope.form.class_id}).then(function(data) {
+        dataFactory.httpRequest('dashboard/sectionsSubjectsList','POST',{},{"classes":$scope.form.classid}).then(function(data) {
             $scope.makesections = data.sections;
         });
     }
@@ -2424,7 +2424,7 @@ OraSchool.controller('classScheduleController', function(dataFactory,$rootScope,
 
     $scope.saveAddSub = function(){
         showHideLoad();
-        dataFactory.httpRequest('classschedule/'+$scope.classId,'POST',{},$scope.form).then(function(data) {
+        dataFactory.httpRequest('classschedule/'+$scope.form.classid,'POST',{},$scope.form).then(function(data) {
             response = apiResponse(data,'add');
             if(data.status == "success"){
                 if(typeof $scope.classSchedule.schedule[response.dayOfWeek].sub == "undefined"){
@@ -2432,19 +2432,10 @@ OraSchool.controller('classScheduleController', function(dataFactory,$rootScope,
                 }
                 $scope.classSchedule.schedule[response.dayOfWeek].sub.push({"id":response.id,"classId":response.classId,"subjectId":response.subjectId,"start":response.startTime,"end":response.endTime});
             }
-            $scope.scheduleModal = !$scope.scheduleModal;
+            $scope.addClassScheduleModal = !$scope.addClassScheduleModal;
             showHideLoad(true);
         });
     }
-
-    $scope.saveWithClassAddSub = function(){
-        showHideLoad();
-        dataFactory.httpRequest('classschedule/saveAdd','POST',{},$scope.form).then(function(data)
-        {
-            console.log(data);   
-        });
-    }
-
     $scope.editSubOne = function(id,day){
         showHideLoad();
         $scope.form = {};
